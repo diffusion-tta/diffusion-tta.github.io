@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .authors {
+            font-size: 20px;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        section.content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback</h1>
+    <p class="authors">Mihir Prabhudesai*, Tsung-Wei Ke∗, Alexander C. Li, Deepak Pathak, Katerina Fragkiadaki</p>
+</header>
+
+<section class="content">
+    <h2>Abstract</h2>
+    <p>
+        The advancements in generative modeling, particularly the advent of diffusion
+models, have sparked a fundamental question: how can these models be effectively
+used for discriminative tasks? In this work, we find that generative models can
+be great test-time adapters for discriminative models. Our method, Diff-TTA ,
+is designed to adapt pre-trained discriminative models such as image classifiers,
+segmenters and depth predictors, independently to each unlabelled example in
+the test set using generative feedback from a diffusion model. This is achieved
+through modulation of the conditioning of the diffusion model using the output of
+the discriminative model, and end-to-end backpropagation of the gradients from
+image likelihood maximization to discriminative model’s parameters. We show
+Diff-TTA significantly enhances the accuracy of various large scale pre-trained
+discriminative models, such as, ImageNet classifiers, CLIP models, image pixel
+labellers and image depth predictors. Diff-TTA outperforms existing test-time
+adaptation methods, including TTT-MAE and TENT, and particularly shines in
+online adaptation setups, where the discriminative model is continually adapted to
+each example in sequence.
+    </p>
+
+</section>
+
+</body>
+</html>
