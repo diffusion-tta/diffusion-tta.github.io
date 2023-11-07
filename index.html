@@ -1,64 +1,948 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 40px;
-            line-height: 1.6;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .authors {
-            font-size: 20px;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-        section.content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <meta charset="utf-8">
+    <meta property="og:title" content="Diffusion-TTA" />
+    <meta property="og:description" content="Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback" />
+    <meta property="og:url" content="https://diffusion-tta.github.io/" />
+    <meta property="og:image" content="https://diffusion-tta.github.io//static/images/preview.jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="628" />
+    <meta name="description"
+        content="Generative diffusion models are great test-time adapters for discriminative models." />
+    <meta name="keywords"
+        content="diffusion models, generative models, zero-shot learning, supervised learning, classification, test-time adaptation, Bayes' theorem, evidence lower bound (ELBO), Monte Carlo estimation, computer vision, deep learning, robustness" />
+    <meta name="viewport" content="initial-scale=1" />
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Diffusion-TTA" />
+    <meta name="twitter:description"
+        content="Generative diffusion models are great test-time adapters for discriminative models." />
+    <meta name="twitter:url" content="https://diffusion-tta.github.io/" />
+    <meta name="twitter:image" content="https://diffusion-tta.github.io/static/images/preview.jpeg" />
+    <!-- <meta name="twitter:site" content="@pathak2206" /> -->
+    <meta name="twitter:image" content="https://diffusion-tta.github.io/static/images/preview.jpeg" />
+    <meta name="twitter:image:src" content="https://diffusion-tta.github.io/static/images/preview.jpeg" />
+    <meta name="twitter:image_alt" content="Diffusion-TTA" />
+
+    <title>Diffusion-TTA</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYWGEJGP6S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-RYWGEJGP6S');
+    </script>
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <link rel="stylesheet" href="https://use.typekit.net/iag3ven.css">
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-coy.min.css"/> -->
+    <link rel="stylesheet" href="./static/css/prism.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.0.1/prism-bibtex.min.js">
+    </script>
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔎</text></svg>">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/bulma-slider.min.js"></script>
+
+    <!-- mathjax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
+
 <body>
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <h1 class="title is-1 is-size-1 publication-title">Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback</h1>
+                        <div class="is-size-5 publication-authors">
+                            <!-- TODO: FIX -->
+                            <span class="author-block">
+                                <a href="https://mihirp1998.github.io/">Mihir Prabhudesai</a>
+                            </span>
+                            &nbsp;
+                            &nbsp;
+                            <span class="author-block">
+                                <a href="http://twke18.github.io/" target="_blank">Tsung-Wei Ke</a>
+                            </span>
+                            &nbsp;
+                            &nbsp;
+                            <span class="author-block">
+                                <a href="http://alexanderli.com/" target="_blank">Alexander C.
+                                    Li</a>
+                            </span>
+                            &nbsp;
+                            &nbsp;
+                            <span class="author-block">
+                                <a href="https://www.cs.cmu.edu/~dpathak/" target="_blank">Deepak Pathak</a>
+                            </span>
+                            &nbsp;
+                            &nbsp;
+                            <span class="author-block">
+                                <a href="https://www.cs.cmu.edu/~katef/" target="_blank">Katerina Fragkiadaki</a>
+                            </span>
+                        </div>
+                        <p style="padding: 0.25rem;" />
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">Carnegie Mellon University</span>
+                        </div>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block">NeuRIPS 2023</span>
+                        </div>
 
-<header>
-    <h1>Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback</h1>
-    <p class="authors">Mihir Prabhudesai*, Tsung-Wei Ke∗, Alexander C. Li, Deepak Pathak, Katerina Fragkiadaki</p>
-</header>
+                        <p style="padding: 20px;" />
 
-<section class="content">
-    <h2>Abstract</h2>
-    <p>
-        The advancements in generative modeling, particularly the advent of diffusion
-models, have sparked a fundamental question: how can these models be effectively
-used for discriminative tasks? In this work, we find that generative models can
-be great test-time adapters for discriminative models. Our method, Diff-TTA ,
-is designed to adapt pre-trained discriminative models such as image classifiers,
-segmenters and depth predictors, independently to each unlabelled example in
-the test set using generative feedback from a diffusion model. This is achieved
-through modulation of the conditioning of the diffusion model using the output of
-the discriminative model, and end-to-end backpropagation of the gradients from
-image likelihood maximization to discriminative model’s parameters. We show
-Diff-TTA significantly enhances the accuracy of various large scale pre-trained
-discriminative models, such as, ImageNet classifiers, CLIP models, image pixel
-labellers and image depth predictors. Diff-TTA outperforms existing test-time
-adaptation methods, including TTT-MAE and TENT, and particularly shines in
-online adaptation setups, where the discriminative model is continually adapted to
-each example in sequence.
-    </p>
+                        <div class="buttons is-centered">
+                            <div class="publication-links">
+                              <!-- PDF Link. -->
+                              <span class="link-block">
+                                <a href="./static/docs/diffusion_tta.pdf"
+                                   class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                  <i class="fas fa-file-pdf"></i>
+                                </span>
+                                <span>Paper</span>
+                                </a>
+                              </span>
+                              <span class="link-block">
+                                <a href=""
+                                   class="external-link button is-normal is-rounded is-dark">
+                                  <span class="icon">
+                                      <i class="ai ai-arxiv"></i>
+                                  </span>
+                                  <span>arXiv</span>
+                                </a>
+                              </span>
+                              <!-- Code Link. -->
+                              <span class="link-block">
+                                <a href="https://github.com/diffusion-tta/diffusion-tta"
+                                   class="external-link button is-normal is-rounded is-dark">
+                                  <span class="icon">
+                                      <i class="fab fa-github"></i>
+                                  </span>
+                                  <span>Code</span>
+                                  </a>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-</section>
+    <!-- hack to pull the below up vertically -->
+    <span style="display:block; margin-top:-1.75em;"/>
 
+    <!-- Method Overview -->
+    <section class="section" id="method-overview">
+        <div class="container is-max-widescreen">
+            <div class="columns is-centered has-text-centered">
+                <div class="column" style="border-radius: 10px; background-color: rgb(250,250,250)">
+                    <h2 class="title is-3">
+                        <span class="method-name">Diffusion-TTA</span>
+                    </h2>
+                    <p style="padding: 0px;" />
+                    <div id="method-overview-wrapper">
+                        <img src="./static/images/arch_figure.gif" alt="Diffusion-TTA method."
+                            class="method-overview-full-img  method-overview" draggable="false" />
+                    </div>
+                            <p style="padding: 10px;" />
+                        <div class="method-overview-text has-text-justified">
+                            <p>
+                                <b>Generative diffusion models are great test-time adapters for discriminative models.</b>  Our method consists of discriminative and generative modules. Given an image \(\mathbf x \), the discriminative model \(\mathbf f_{\theta} \) predicts task output \(\mathbf y \). The task output \(\mathbf y \) is transformed into condition \(\mathbf c \). Finally, we use the generative diffusion model \(\mathbf \epsilon_{\phi} \) to measure the likelihood of the input image, conditioned on \(\mathbf c \). This consists of using the diffusion model \(\mathbf \epsilon_{\phi} \) to predict the added noise \(\mathbf \epsilon \) from the noisy image \(\mathbf x_{t} \) and condition \(\mathbf c \). We maximize the image likelihood using the diffusion loss by updating the discriminative and generative model weights via backpropagation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Method Overview -->
+
+    <!-- Teaser -->
+    <section class="section" id="teaser">
+        <div class="container is-max-widescreen">
+            <div class="columns is-centered has-text-centered">
+                <div class="column" style="border-radius: 10px; background-color: rgb(250,250,250)">
+                    <h2 class="title is-3">
+                        <span class="method-name">Improve classification by minimizing diffusion loss</span>
+                    </h2>
+                    <p style="padding: 0px;" />
+                    <div id="method-overview-wrapper">
+                        <img src="./static/images/tta_title.png" alt="input image" style="vertical-align:middle;margin:0px 0px"/>
+                        <img src="./static/images/tta_1.gif" alt="input image"
+                            class="method-overview-full-img  method-overview" draggable="false" />
+                        <img src="./static/images/tta_2.gif" alt="input image"
+                            class="method-overview-full-img  method-overview" draggable="false" />
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Teaser -->
+
+    <!-- <p style="padding: 10px;" /> -->
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-three-quarters">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            The advancements in generative modeling, particularly the advent of diffusion models, have sparked a fundamental question: how can these models be effectively used for discriminative tasks? In this work, we find that generative models can be great test-time adapters for discriminative models. Our method, Diffusion-TTA, adapts pre-trained discriminative models such as image classifiers, segmenters and depth predictors, to each unlabelled example in the test set using generative feedback from a diffusion model.
+                        </p>
+                        <p>
+                            We achieve this by modulating the conditioning of the diffusion model using the output of the discriminative model. We then maximize the image likelihood objective by backpropagating the gradients to discriminative model’s parameters. We show Diffusion-TTA significantly enhances the accuracy of various large-scale pre-trained discriminative models, such as, ImageNet classifiers, CLIP models, image pixel labellers and image depth predictors. Diffusion-TTA outperforms existing test-time adaptation methods, including TTT-MAE and TENT, and particularly shines in online adaptation setups, where the discriminative model is continually adapted to each example in the test set.
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section">
+        <!-- Zero Shot. -->
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-three-quarters">
+                    <h2 class="title is-3">Test-time adaptation of ImageNet-trained classifiers</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            We use Diffusion-TTA to adapt multiple ImageNet classifiers with varying backbone architectures and sizes: <a href="https://arxiv.org/abs/1512.03385" target="_blank">ResNet-18, ResNet-50</a>, <a href="https://arxiv.org/abs/2010.11929" target="_blank">ViT-B/32</a>, and <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNext-Tiny/Large</a>. For fair comparisions, we use <a href="https://arxiv.org/abs/2212.09748" target="_blank">Diffusion Transformer (DiT-XL/2)</a> as our class-conditional generative model, which is trained on ImageNet from scratch.  All models are trained on ImageNet without using additional data.
+
+                            We consider the following datasets for TTA of ImageNet classifiers: <a href="https://www.image-net.org/challenges/LSVRC/2012/" target="_blank">ImageNet</a> and its out-of-distribution counterparts: <a href="https://arxiv.org/abs/1903.12261" target="_blank">ImageNet-C</a> (level-5 gaussian noise), <a href="https://arxiv.org/abs/1907.07174" target="_blank">ImageNet-A</a>, <a href="https://github.com/hendrycks/imagenet-r" target="_blank">ImageNet-R</a>, <a href="https://github.com/modestyachts/ImageNetV2" target="_blank">ImageNetV2</a>, and <a href="https://github.com/rgeirhos/Stylized-ImageNet" target="_blank">Stylized ImageNet</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="padding: 20px;" />
+        <div class="is-centered has-text-centered">
+            <div class="table-container is-max-desktop">
+                <table style="width:100%">
+                    <caption>
+                        Single-sample test-time adaptation of ImageNet-trained classifiers.
+                    </caption>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th colspan="1">ID</th>
+                        <th colspan="5">OOD</th>
+                    </tr>
+                    <tr>
+                        <th>Model</th>
+                        <th>TTA</th>
+                        <th>ImageNet</th>
+                        <th>ImageNet-A</th>
+                        <th>ImageNet-R</th>
+                        <th>ImageNet-C</th>
+                        <th>ImageNet-V2</th>
+                        <th>ImageNet-S</th>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>Customized ViT-L/16</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>82.1</td>
+                        <td>14.4</td>
+                        <td>33.0</td>
+                        <td>17.5</td>
+                        <td>72.5</td>
+                        <td>11.9</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TTT-MAE</td>
+                        <td>82.0</td>
+                        <td>21.3</td>
+                        <td>39.2</td>
+                        <td>27.5</td>
+                        <td>72.3</td>
+                        <td>20.2</td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ResNet18</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>69.5</td>
+                        <td>1.4</td>
+                        <td>34.6</td>
+                        <td>2.6</td>
+                        <td>57.1</td>
+                        <td>7.7</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>63.0</td>
+                        <td>0.6</td>
+                        <td>34.7</td>
+                        <td>12.1</td>
+                        <td>52.0</td>
+                        <td>9.8</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>63.0</td>
+                        <td>0.7</td>
+                        <td>34.7</td>
+                        <td>11.7</td>
+                        <td>52.1</td>
+                        <td>9.7</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>77.2</strong></td>
+                        <td><strong>6.1</strong></td>
+                        <td><strong>39.7</strong></td>
+                        <td>4.5</td>
+                        <td><strong>63.8</strong></td>
+                        <td><strong>12.3</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ViT-B/32</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>75.7</td>
+                        <td>9.0</td>
+                        <td>45.2</td>
+                        <td>39.5</td>
+                        <td>61.0</td>
+                        <td>15.8</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>75.7</td>
+                        <td>9.0</td>
+                        <td>45.3</td>
+                        <td>38.9</td>
+                        <td>61.1</td>
+                        <td>10.4</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>75.8</td>
+                        <td>8.6</td>
+                        <td>45.0</td>
+                        <td>40.0</td>
+                        <td>60.9</td>
+                        <td>1.1</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>77.6</strong></td>
+                        <td><strong>11.2</strong></td>
+                        <td><strong>46.5</strong></td>
+                        <td><strong>41.4</strong></td>
+                        <td><strong>64.4</strong></td>
+                        <td><strong>21.3</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ConvNext-Tiny</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>81.9</td>
+                        <td>22.7</td>
+                        <td>47.8</td>
+                        <td>16.4</td>
+                        <td>70.9</td>
+                        <td>20.2</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>79.3</td>
+                        <td>10.6</td>
+                        <td>42.7</td>
+                        <td>2.7</td>
+                        <td>69.0</td>
+                        <td>19.9</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>80.5</td>
+                        <td>13.2</td>
+                        <td>47.2</td>
+                        <td>13.7</td>
+                        <td>68.9</td>
+                        <td>19.3</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>83.1</strong></td>
+                        <td><strong>25.8</strong></td>
+                        <td><strong>49.7</strong></td>
+                        <td><strong>21.0</strong></td>
+                        <td><strong>71.5</strong></td>
+                        <td><strong>22.6</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--/ Zero Shot. -->
+        <p style="padding: 20px;" />
+        <div class="is-centered has-text-centered">
+            <div class="table-container is-max-desktop">
+                <table style="width:100%">
+                    <caption>
+                        Online test-time adaptation of ImageNet-trained classifiers on ImageNet-C.
+                    </caption>
+                    <tr>
+                        <th>Model</th>
+                        <th>TTA</th>
+                        <th>Gaussian Noise</th>
+                        <th>Fog</th>
+                        <th>Pixelate</th>
+                        <th>Snow</th>
+                        <th>Contrast</th>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>Customized ViT-L/16</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>17.1</td>
+                        <td>38.7</td>
+                        <td>47.1</td>
+                        <td>35.6</td>
+                        <td>6.9</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TTT-MAE</td>
+                        <td>37.9</td>
+                        <td>51.1</td>
+                        <td>65.7</td>
+                        <td>56.5</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ResNet50</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>6.3</td>
+                        <td>25.2</td>
+                        <td>26.5</td>
+                        <td>16.7</td>
+                        <td>3.6</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>12.3</td>
+                        <td>43.2</td>
+                        <td>41.8</td>
+                        <td>28.4</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>12.2</td>
+                        <td>42.4</td>
+                        <td>41.7</td>
+                        <td>28.6</td>
+                        <td>11.9</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>19.0</strong></td>
+                        <td><strong>43.2</strong></td>
+                        <td><strong>50.2</strong></td>
+                        <td><strong>33.6</strong></td>
+                        <td>2.7</td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ViT-B/32</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>39.5</td>
+                        <td>35.9</td>
+                        <td>55.0</td>
+                        <td>30.0</td>
+                        <td>31.5</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>38.9</td>
+                        <td>35.8</td>
+                        <td>55.5</td>
+                        <td>30.7</td>
+                        <td>32.1</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>40.0</td>
+                        <td>34.6</td>
+                        <td>54.5</td>
+                        <td>29.7</td>
+                        <td>32.0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>46.5</strong></td>
+                        <td><strong>56.2</strong></td>
+                        <td><strong>64.7</strong></td>
+                        <td><strong>50.4</strong></td>
+                        <td><strong>33.6</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>ConvNext-Tiny</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>16.4</td>
+                        <td>32.3</td>
+                        <td>37.2</td>
+                        <td>38.3</td>
+                        <td>32.0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>2.7</td>
+                        <td>5.0</td>
+                        <td>43.9</td>
+                        <td>15.2</td>
+                        <td>40.7</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>13.7</td>
+                        <td>29.8</td>
+                        <td>37.3</td>
+                        <td>26.6</td>
+                        <td>32.6</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>47.4</strong></td>
+                        <td><strong>65.9</strong></td>
+                        <td><strong>69.0</strong></td>
+                        <td><strong>62.6</strong></td>
+                        <td><strong>46.2</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                   <tr>
+                        <td>ConvNext-Large</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>33.0</td>
+                        <td>34.4</td>
+                        <td>49.3</td>
+                        <td>44.5</td>
+                        <td>39.8</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">TENT</td>
+                        <td>30.8</td>
+                        <td>53.5</td>
+                        <td>51.1</td>
+                        <td>44.6</td>
+                        <td>52.4</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:blue">COTTA</td>
+                        <td>33.3</td>
+                        <td>15.1</td>
+                        <td>34.6</td>
+                        <td>7.7</td>
+                        <td>10.7</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">Our</td>
+                        <td><strong>54.9</strong></td>
+                        <td><strong>67.7</strong></td>
+                        <td><strong>71.7</strong></td>
+                        <td><strong>64.8</strong></td>
+                        <td><strong>55.7</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <!-- Zero Shot. -->
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-three-quarters">
+                    <h2 class="title is-3">Test-time adaptation of CLIP classifiers</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Under single-sample test-time adapation setup, our method improves CLILP classifiers of different sizes consistently over all following datasets: <a href="https://www.image-net.org/challenges/LSVRC/2012/" target="_blank">ImageNet</a>, <a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank">CIFAR 100</a>, <a href="https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/" target="_blank">Food 101</a>, <a href="https://www.robots.ox.ac.uk/~vgg/data/flowers/102/" target="_blank">Flowers 102</a>, <a href="https://www.robots.ox.ac.uk/~vgg/data/fgvc-aircraft/" target="_blank">FGVC Aircraft</a>, and <a href="https://www.robots.ox.ac.uk/~vgg/data/pets/" target="_blank">Oxford-IIIT Pets</a> datasets.  CLIP classifiers have not seen test images from these dataset during training.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="padding: 20px;" />
+        <div class="is-centered has-text-centered">
+            <div class="table-container is-max-desktop">
+                <table style="width:100%">
+                    <caption>
+                        Single-sample test-time adaptation of CLIP classifiers.
+                    </caption>
+                    <tr>
+                        <th>Model</th>
+                        <th>TTA</th>
+                        <th>Food101</th>
+                        <th>CIFAR100</th>
+                        <th>FGVC</th>
+                        <th>Pets</th>
+                        <th>Flowers</th>
+                        <th>ImageNet</th>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>CLIP ViT-B/32</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>82.6</td>
+                        <td>61.2</td>
+                        <td>17.8</td>
+                        <td>82.2</td>
+                        <td>66.7</td>
+                        <td>57.5</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">&#10003;</td>
+                        <td><strong>86.2</strong></td>
+                        <td><strong>62.8</strong></td>
+                        <td><strong>21.0</strong></td>
+                        <td><strong>84.9</strong></td>
+                        <td><strong>67.7</strong></td>
+                        <td><strong>60.8</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>CLIP ViT-B/16</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>88.1</td>
+                        <td>69.4</td>
+                        <td>22.8</td>
+                        <td>85.5</td>
+                        <td>69.3</td>
+                        <td>62.3</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">&#10003;</td>
+                        <td><strong>88.8</strong></td>
+                        <td>69.0</td>
+                        <td><strong>24.6</strong></td>
+                        <td><strong>86.1</strong></td>
+                        <td><strong>71.5</strong></td>
+                        <td><strong>63.8</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>CLIP ViT-B/14</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>93.1</td>
+                        <td>79.6</td>
+                        <td>32.0</td>
+                        <td>91.9</td>
+                        <td>78.8</td>
+                        <td>70.0</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">&#10003;</td>
+                        <td>93.1</td>
+                        <td><strong>80.6</strong></td>
+                        <td><strong>33.4</strong></td>
+                        <td><strong>92.3</strong></td>
+                        <td><strong>79.2</strong></td>
+                        <td><strong>71.2</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--/ Zero Shot. -->
+    </section>
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-three-quarters">
+                    <h2 class="title is-3">Improved Semantic Segmentation and Depth Estimation</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            We use Diffusion-TTA to adapt semantic segmentors of <a href="https://arxiv.org/abs/2105.15203" target="_blank">SegFormer</a> and depth predictors of <a href="https://arxiv.org/abs/1812.11941" target="_blank">DenseDepth</a>. We use a <a href="https://arxiv.org/abs/2112.10752" target="_blank">latent diffusion model</a> which is pre-trained on <a href="https://groups.csail.mit.edu/vision/datasets/ADE20K/" target="_blank">ADE20K</a> and <a href="https://cs.nyu.edu/~silberman/datasets/nyu_depth_v2.html" target="_blank">NYU Depth v2</a> dataset for the respective task. The diffusion model concatenates the segmentation/depth map with the noisy image during conditioning.  We test adaptation performance on different distribution drifts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p style="padding: 10px;" />
+            <div class="container is-max-desktop">
+                 <div class="columns is-vcentered interpolation-panel">
+                  <div class="column is-3 has-text-centered">
+                    <img src="./static/images/segmentation/00052_gt_rgb.png"
+                         class="interpolation-image"
+                         alt=""/>
+                    <p>Input</p>
+                  </div>
+                  <div class="column is-3 has-text-centered">
+                    <img src="./static/images/segmentation/00052_pred_seg.png"
+                         class="interpolation-image"
+                         alt=""/>
+                    <p>Before TTA</p>
+                  </div>
+                  <div class="column is-3 has-text-centered">
+                    <img src="./static/images/segmentation/00052_pred_rgb_after_tta.png"
+                         class="interpolation-image"
+                         alt=""/>
+                    <p>After TTA</p>
+                  </div>
+                  <div class="column is-3 has-text-centered">
+                    <img src="./static/images/segmentation/00052_gt_seg.png"
+                         class="interpolation-image"
+                         alt=""/>
+                    <p>Ground-truth</p>
+                  </div>
+                </div>
+            </div>
+            <p style="padding: 20px;" />
+            <div class="table-container is-max-desktop is-centered">
+                <table style="width:70%">
+                    <caption>
+                        Single-sample test-time adaptation on semantic segmentation and depth estimation
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Task: Model</th>
+                            <th>TTA</th>
+                            <th>Clean</th>
+                            <th>Gaussian Noise</th>
+                            <th>Fog</th>
+                            <th>Frost</th>
+                            <th>Snow</th>
+                            <th>Contrast</th>
+                            <th>Shot</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <td>Segmentation: Segformer</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>66.1</td>
+                        <td>65.3</td>
+                        <td>63.0</td>
+                        <td>58.0</td>
+                        <td>55.2</td>
+                        <td>65.3</td>
+                        <td>63.3</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">&#10003;</td>
+                        <td>66.1</td>
+                        <td><strong>66.4</strong></td>
+                        <td><strong>65.1</strong></td>
+                        <td><strong>58.9</strong></td>
+                        <td><strong>56.6</strong></td>
+                        <td><strong>66.4</strong></td>
+                        <td><strong>63.7</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    <tr>
+                        <td>Depth: DenseDepth</td>
+                        <!-- <td>&#10003;</td> -->
+                        <td style="color:red">&#10007;</td>
+                        <td>92.4</td>
+                        <td>79.1</td>
+                        <td>81.6</td>
+                        <td>72.2</td>
+                        <td>72.7</td>
+                        <td>77.4</td>
+                        <td>81.3</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="color:lime">&#10003;</td>
+                        <td><strong>92.6</strong></td>
+                        <td><strong>82.1</strong></td>
+                        <td><strong>84.4</strong></td>
+                        <td><strong>73.0</strong></td>
+                        <td><strong>74.1</strong></td>
+                        <td>77.4</td>
+                        <td><strong>82.1</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="border-bottom: 1px solid #ddd;"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section" id="paper">
+        <div class="container is-mobile">
+            <div class="columns is-centered has-text-centered">
+                <div class="container content">
+                    <h2 class="title is-3">BibTeX</h2>
+                    <div id="bibtex" class="column has-text-justified is-centered">
+                        <!-- https://github.com/SaswatPadhi/prismjs-bibtex -->
+                        <pre><code class="language-bibtex">@inproceedings{prabhudesai2023difftta,
+      title={Test-time Adaptation of Discriminative Models via Diffusion Generative Feedback},
+      author={Prabhudesai, Mihir and Ke, Tsung-Wei and Li, Alexander C. and Pathak, Deepak and Fragkiadaki, Katerina},
+      year={2023},
+      booktitle={Conference on Neural Information Processing Systems},
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <!-- TODO: UPDATE -->
+                <a class="icon-link" href="" target="_blank">
+                    <i class="ai ai-arxiv"></i>
+                </a>
+                &nbsp;
+                <!-- TODO: UPDATE -->
+                <a class="icon-link" href="./static/docs/diffusion_tta.pdf" target="_blank">
+                    <i class="fas fa-file-pdf"></i>
+                </a>
+                <!-- &nbsp;
+                <a class="icon-link" href="https://youtu.be/1hYtGZ0CUSA" target="_blank">
+                    <i class="fab fa-youtube"></i>
+                </a> -->
+                <!-- &nbsp;
+                <a class="icon-link" href="./static/docs/InternetExplorer.pptx" target="_blank">
+                    <i class="fas fa-file-powerpoint"></i>
+                </a> -->
+                &nbsp;
+                <a class="icon-link" href="https://github.com/diffusion-tta/diffusion-tta"
+                    target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <div class="columns is-centered">
+                <div class="content">
+                    <p>
+                        Page source code was adapted from
+                        <a href="https://diffusion-classifier.github.io" target="_blank">here</a>
+                        and
+                        <a href="https://nerfies.github.io" target="_blank">here</a>
+                        and
+                        <a href="https://internet-explorer-ssl.github.io"
+                            target="_blank">here</a>,
+                        and can be found in <a
+                            href="https://github.com/diffusion-tta/diffusion-tta.github.io"
+                            target="_blank">this repository</a>.
+                    </p>
+                </div>
+            </div>
+    </footer>
+
+    <script src="./static/js/index.js"></script>
+    <script src="./static/js/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.0.1/prism-bibtex.js"
+        integrity="sha256-+dK6uqUp/DnP6ef97s8XcoynBnGe5vM5gvBECH0EB3U=" crossorigin="anonymous">
+        </script>
 </body>
+
 </html>
