@@ -160,6 +160,59 @@
     <!-- hack to pull the below up vertically -->
     <span style="display:block; margin-top:-1.75em;"/>
 
+    <!-- Teaser -->
+    <section class="section" id="teaser">
+        <div class="container is-max-widescreen">
+            <div class="columns is-centered has-text-centered">
+                <div class="column" style="border-radius: 10px;">
+                    <!-- <h2 class="title is-3">
+                        <span class="method-name">Improve classification by minimizing diffusion loss</span>
+                    </h2> -->
+                    <p style="padding: 0px;" />
+                    <div id="method-overview-wrapper">
+                        <video autoplay muted loop>
+                            <source src="./static/images/poster_video_5.m4v" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>                               
+                        <!-- <img src="./static/images/tta_title.png" alt="input image" style="vertical-align:middle;margin:0px 0px"/>
+                        <img src="./static/images/tta_1.gif" alt="input image"
+                            class="method-overview-full-img  method-overview" draggable="false" />
+                        <img src="./static/images/tta_2.gif" alt="input image"
+                            class="method-overview-full-img  method-overview" draggable="false" /> -->
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/ Teaser -->
+
+
+
+    <!-- <p style="padding: 10px;" /> -->
+
+    <section class="section">
+        <div class="container is-max-desktop">
+            <!-- Abstract. -->
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-three-quarters">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            The advancements in generative modeling, particularly the advent of diffusion models, have sparked a fundamental question: how can these models be effectively used for discriminative tasks? In this work, we find that generative models can be great test-time adapters for discriminative models. Our method, Diffusion-TTA, adapts pre-trained discriminative models such as image classifiers, segmenters and depth predictors, to each unlabelled example in the test set using generative feedback from a diffusion model.
+                        </p>
+                        <p>
+                            We achieve this by modulating the conditioning of the diffusion model using the output of the discriminative model. We then maximize the image likelihood objective by backpropagating the gradients to discriminative model’s parameters. We show Diffusion-TTA significantly enhances the accuracy of various large-scale pre-trained discriminative models, such as, ImageNet classifiers, CLIP models, image pixel labellers and image depth predictors. Diffusion-TTA outperforms existing test-time adaptation methods, including TTT-MAE and TENT, and particularly shines in online adaptation setups, where the discriminative model is continually adapted to each example in the test set.
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
     <!-- Method Overview -->
     <section class="section" id="method-overview">
         <div class="container is-max-widescreen">
@@ -188,53 +241,7 @@
             </div>
         </div>
     </section>
-    <!--/ Method Overview -->
-
-    <!-- Teaser -->
-    <section class="section" id="teaser">
-        <div class="container is-max-widescreen">
-            <div class="columns is-centered has-text-centered">
-                <div class="column" style="border-radius: 10px; background-color: rgb(250,250,250)">
-                    <h2 class="title is-3">
-                        <span class="method-name">Improve classification by minimizing diffusion loss</span>
-                    </h2>
-                    <p style="padding: 0px;" />
-                    <div id="method-overview-wrapper">
-                        <img src="./static/images/tta_title.png" alt="input image" style="vertical-align:middle;margin:0px 0px"/>
-                        <img src="./static/images/tta_1.gif" alt="input image"
-                            class="method-overview-full-img  method-overview" draggable="false" />
-                        <img src="./static/images/tta_2.gif" alt="input image"
-                            class="method-overview-full-img  method-overview" draggable="false" />
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--/ Teaser -->
-
-    <!-- <p style="padding: 10px;" /> -->
-
-    <section class="section">
-        <div class="container is-max-desktop">
-            <!-- Abstract. -->
-            <div class="columns is-centered has-text-centered">
-                <div class="column is-three-quarters">
-                    <h2 class="title is-3">Abstract</h2>
-                    <div class="content has-text-justified">
-                        <p>
-                            The advancements in generative modeling, particularly the advent of diffusion models, have sparked a fundamental question: how can these models be effectively used for discriminative tasks? In this work, we find that generative models can be great test-time adapters for discriminative models. Our method, Diffusion-TTA, adapts pre-trained discriminative models such as image classifiers, segmenters and depth predictors, to each unlabelled example in the test set using generative feedback from a diffusion model.
-                        </p>
-                        <p>
-                            We achieve this by modulating the conditioning of the diffusion model using the output of the discriminative model. We then maximize the image likelihood objective by backpropagating the gradients to discriminative model’s parameters. We show Diffusion-TTA significantly enhances the accuracy of various large-scale pre-trained discriminative models, such as, ImageNet classifiers, CLIP models, image pixel labellers and image depth predictors. Diffusion-TTA outperforms existing test-time adaptation methods, including TTT-MAE and TENT, and particularly shines in online adaptation setups, where the discriminative model is continually adapted to each example in the test set.
-
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!--/ Method Overview -->    
 
     <section class="section">
         <!-- Zero Shot. -->
